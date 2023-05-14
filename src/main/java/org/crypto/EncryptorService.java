@@ -7,11 +7,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Scanner;
 
-public class EncryptedDecrypted {
+public class EncryptorService {
 
-    private final Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner;
     private final CaesarCipher cesarCipher = new CaesarCipher();
 
+    public EncryptorService(Scanner scanner) {
+        this.scanner = scanner;
+    }
     public void encryptDecode(Boolean encrypt) throws IOException {
 
         System.out.println("Введите путь к файлу:");
@@ -19,8 +22,8 @@ public class EncryptedDecrypted {
 
         System.out.println("Введите ключ:");
         int key = Integer.parseInt(scanner.nextLine());
-        String suffix = encrypt ? "_enc" : "_dec";
-        Path newPath = PathHelper.buildFileName(path, suffix);
+        String end = encrypt ? "_enc" : "_dec";
+        Path newPath = PathHelper.buildFileName(path, end);
 
         try (BufferedReader reader = Files.newBufferedReader(Path.of(path));
              BufferedWriter writer = Files.newBufferedWriter(newPath)) {
@@ -31,7 +34,6 @@ public class EncryptedDecrypted {
                 writer.write(message + System.lineSeparator());
             }
         }
-        System.out.println("Содержимое файла " + newPath.getFileName() +
-                System.lineSeparator());
+        System.out.println("Содержимое файла " + path + " сохранено в " + newPath.getFileName());
     }
 }
